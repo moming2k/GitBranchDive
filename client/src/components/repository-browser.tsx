@@ -42,6 +42,9 @@ export function RepositoryBrowser({
 
   const { data: repositories } = useQuery<Repository[]>({
     queryKey: ["/api/repositories"],
+    select: (data) => data?.filter((repo, index, self) => 
+      index === self.findIndex(r => r.id === repo.id)
+    ) || []
   });
 
   const { data: branches } = useQuery<string[]>({

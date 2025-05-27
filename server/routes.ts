@@ -69,17 +69,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Create the directory if it doesn't exist
       await fs.mkdir(localPath, { recursive: true });
       
-      // Clone the repository
-      const git = simpleGit();
-      await git.clone(url, localPath);
-      
-      // Check if repository already exists in storage
+      // Check if repository already exists in storage first
       const existing = await storage.getRepositoryByPath(localPath);
       if (existing) {
         await storage.updateRepositoryAccess(existing.id);
         res.json(existing);
         return;
       }
+
+      // Clone the repository
+      const git = simpleGit();
+      await git.clone(url, localPath);
 
       // Create repository entry
       const repository = await storage.createRepository({

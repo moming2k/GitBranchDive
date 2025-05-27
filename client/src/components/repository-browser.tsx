@@ -264,40 +264,34 @@ export function RepositoryBrowser({
         <>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Source Branch</label>
-            <Select value={sourceBranch} onValueChange={onSourceBranchChange}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select source branch" />
-              </SelectTrigger>
-              <SelectContent>
-                {branches?.map((branch) => (
-                  <SelectItem key={branch} value={branch}>
-                    <div className="flex items-center space-x-2">
-                      <GitBranch className="h-4 w-4 text-blue-500" />
-                      <span>{branch}</span>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <select 
+              value={sourceBranch} 
+              onChange={(e) => onSourceBranchChange(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Select source branch</option>
+              {branches?.map((branch) => (
+                <option key={branch} value={branch}>
+                  {branch}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Target Branch</label>
-            <Select value={targetBranch} onValueChange={onTargetBranchChange}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select target branch" />
-              </SelectTrigger>
-              <SelectContent>
-                {branches?.map((branch) => (
-                  <SelectItem key={branch} value={branch}>
-                    <div className="flex items-center space-x-2">
-                      <GitBranch className="h-4 w-4 text-orange-500" />
-                      <span>{branch}</span>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <select 
+              value={targetBranch} 
+              onChange={(e) => onTargetBranchChange(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+            >
+              <option value="">Select target branch</option>
+              {branches?.map((branch) => (
+                <option key={branch} value={branch}>
+                  {branch}
+                </option>
+              ))}
+            </select>
           </div>
 
           <Button 

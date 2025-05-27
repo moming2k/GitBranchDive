@@ -42,6 +42,12 @@ export function RepositoryBrowser({
 
   const { data: repositories = [] } = useQuery<Repository[]>({
     queryKey: ["/api/repositories"],
+    onSuccess: (data) => {
+      console.log("Repository data received:", data);
+      data?.forEach((repo, index) => {
+        console.log(`Repository ${index}:`, repo, typeof repo.name);
+      });
+    }
   });
 
   const { data: branches } = useQuery<string[]>({
@@ -129,7 +135,7 @@ export function RepositoryBrowser({
             <option value="">Select a repository</option>
             {repositories?.map((repo) => (
               <option key={repo.id} value={repo.id}>
-                {repo.name}
+                {typeof repo.name === 'string' ? repo.name : 'Repository'}
               </option>
             ))}
           </select>

@@ -131,10 +131,7 @@ export function RepositoryBrowser({
             <SelectContent>
               {repositories?.map((repo) => (
                 <SelectItem key={repo.id} value={repo.id.toString()}>
-                  <div className="flex items-center space-x-2">
-                    <Folder className="h-4 w-4 text-gray-500" />
-                    <span>{repo.name}</span>
-                  </div>
+                  {repo.name}
                 </SelectItem>
               ))}
             </SelectContent>

@@ -131,7 +131,10 @@ export function RepositoryBrowser({
             <SelectContent>
               {repositories?.map((repo) => (
                 <SelectItem key={repo.id} value={repo.id.toString()}>
-                  {repo.name}
+                  <div className="flex items-center space-x-2">
+                    <Folder className="h-4 w-4 text-gray-500" />
+                    <span>{repo.name}</span>
+                  </div>
                 </SelectItem>
               ))}
             </SelectContent>
@@ -143,12 +146,9 @@ export function RepositoryBrowser({
                 <FolderOpen className="h-4 w-4" />
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-3xl" aria-describedby="dialog-description">
+            <DialogContent className="max-w-3xl">
               <DialogHeader>
                 <DialogTitle>Add Repository</DialogTitle>
-                <p id="dialog-description" className="text-sm text-gray-600">
-                  Browse local directories or clone remote repositories to add them to your workspace.
-                </p>
               </DialogHeader>
               
               <Tabs defaultValue="browse" className="w-full">

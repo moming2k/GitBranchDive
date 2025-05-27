@@ -66,43 +66,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return;
       }
 
-      // Check if directory already exists
-      try {
-        await fs.access(localPath);
-        // Directory exists, check if it's already a git repo and in our storage
-        const existing = await storage.getRepositoryByPath(localPath);
-        if (existing) {
-          await storage.updateRepositoryAccess(existing.id);
-          res.json(existing);
-          return;
-        } else {
-          // Directory exists but not in storage, try to verify it's a git repo
-          try {
-            const git = simpleGit(localPath);
-            await git.status();
-            // It's a valid git repo, add it to storage
-            const repository = await storage.createRepository({
-              name: name || path.basename(localPath),
-              path: localPath
-            });
-            res.json(repository);
-            return;
-          } catch {
-            res.status(400).json({ error: "Directory already exists and is not a valid git repository" });
-            return;
-          }
-        }
-      } catch {
-        // Directory doesn't exist, proceed with clone
-      }
-
-      // Create parent directory if needed
-      await fs.mkdir(path.dirname(localPath), { recursive: true });
+      // Create the directory if it doesn't exist
+      await fs.mkdir(localPath, { recursive: true });
       
       // Clone the repository
       const git = simpleGit();
       await git.clone(url, localPath);
       
+      // Check if repository already exists in storage
+      const existing = await storage.getRepositoryByPath(localPath);
+      if (existing) {
+        await storage.updateRepositoryAccess(existing.id);
+        res.json(existing);
+        return;
+      }
+
       // Create repository entry
       const repository = await storage.createRepository({
         name: name || path.basename(localPath),

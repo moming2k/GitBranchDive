@@ -143,9 +143,12 @@ export function RepositoryBrowser({
                 <FolderOpen className="h-4 w-4" />
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-3xl">
+            <DialogContent className="max-w-3xl" aria-describedby="dialog-description">
               <DialogHeader>
                 <DialogTitle>Add Repository</DialogTitle>
+                <p id="dialog-description" className="text-sm text-gray-600">
+                  Browse local directories or clone remote repositories to add them to your workspace.
+                </p>
               </DialogHeader>
               
               <Tabs defaultValue="browse" className="w-full">

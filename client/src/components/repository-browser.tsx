@@ -118,24 +118,21 @@ export function RepositoryBrowser({
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">Repository</label>
         <div className="flex space-x-2">
-          <Select 
-            value={selectedRepository?.id.toString() || ""} 
-            onValueChange={(value) => {
-              const repo = repositories?.find(r => r.id.toString() === value);
+          <select 
+            value={selectedRepository?.id || ""} 
+            onChange={(e) => {
+              const repo = repositories?.find(r => r.id.toString() === e.target.value);
               if (repo) onRepositorySelect(repo);
             }}
+            className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <SelectTrigger className="flex-1">
-              <SelectValue placeholder="Select a repository" />
-            </SelectTrigger>
-            <SelectContent>
-              {Array.isArray(repositories) && repositories.map((repo) => (
-                <SelectItem key={`repo-${repo.id}`} value={repo.id.toString()}>
-                  {repo.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            <option value="">Select a repository</option>
+            {repositories?.map((repo) => (
+              <option key={repo.id} value={repo.id}>
+                {repo.name}
+              </option>
+            ))}
+          </select>
           
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>

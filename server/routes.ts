@@ -56,6 +56,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Clone a remote repository
+  app.post("/api/repositories/clone", async (req, res) => {
+    try {
+      const { url, localPath, name } = req.body;
+      
+      if (!url || !localPath) {
+        res.status(400).json({ error: "URL and local path are required" });
+        return;
+      }
+
+      // Create the directory if it doesn't exist
+      await fs.mkdir(localPath, { recursive: true });
+      
+      // Clone the repository
+      const git = simpleGit();
+      await git.clone(url, localPath);
+      
+      // Check if repository already exists in storage
+      const existing = await storage.getRepositoryByPath(localPath);
+      if (existing) {
+        await storage.updateRepositoryAccess(existing.id);
+        res.json(existing);
+        return;
+      }
+
+      // Create repository entry
+      const repository = await storage.createRepository({
+        name: name || path.basename(localPath),
+        path: localPath
+      });
+      
+      res.json(repository);
+    } catch (error) {
+      console.error('Clone error:', error);
+      res.status(500).json({ error: "Failed to clone repository: " + (error as Error).message });
+    }
+  });
+
   // Browse local directories
   app.post("/api/browse", async (req, res) => {
     try {
